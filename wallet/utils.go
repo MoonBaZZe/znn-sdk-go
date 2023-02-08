@@ -27,9 +27,15 @@ func WriteKeyFile(ks *zwallet.KeyStore, name, password string) error {
 	return os.WriteFile(kf.Path, keyFileJson, 0644)
 }
 
-func ReadKeyFile(name, password string) (*zwallet.KeyStore, error) {
-	path := filepath.Join(node.DefaultDataDir(), "wallet", name)
-	kf, err := zwallet.ReadKeyFile(path)
+func ReadKeyFile(name, password, path string) (*zwallet.KeyStore, error) {
+	var newPath string
+	if path == "" {
+		newPath = filepath.Join(node.DefaultDataDir(), "wallet", name)
+	} else {
+		newPath = path
+	}
+
+	kf, err := zwallet.ReadKeyFile(newPath)
 	if err != nil {
 		return nil, err
 	}

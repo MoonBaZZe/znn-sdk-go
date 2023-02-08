@@ -68,7 +68,7 @@ if err := z.Stop(); err != nil {
 ### Read existing keyFile
 
 ```go
-keyFile, err := wallet.ReadKeyFile("keyfile-sdk", "keyfilePassword")
+keyFile, err := wallet.ReadKeyFile("keyfile-sdk", "123456")
 if err != nil {
     fmt.Printf("err: %s\n", err)
 } else {

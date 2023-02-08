@@ -56,7 +56,7 @@ func (la *LedgerApi) GetAccountBlockByHash(blockHash types.Hash) (*api.AccountBl
 
 func (la *LedgerApi) GetAccountBlocksByHeight(address types.Address, height, count uint64) (*api.AccountBlockList, error) {
 	ans := new(api.AccountBlockList)
-	if err := la.client.Call(ans, "ledger.getAccountBlockByHash", address.String(), height, count); err != nil {
+	if err := la.client.Call(ans, "ledger.getAccountBlocksByHeight", address.String(), height, count); err != nil {
 		return nil, err
 	}
 	return ans, nil

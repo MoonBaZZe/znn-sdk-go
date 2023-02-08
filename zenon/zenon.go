@@ -91,7 +91,7 @@ func (z *Zenon) Send(transaction *nom.AccountBlock) error {
 	if err := checkAndSetFields(z.Client, transaction, *z.keyPair); err != nil {
 		return err
 	}
-	if err := setDifficulty(z.Client, transaction); err != nil {
+	if err := SetDifficulty(z.Client, transaction); err != nil {
 		return err
 	}
 	setHashAndSignature(transaction, *z.keyPair)

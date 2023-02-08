@@ -9,7 +9,6 @@ import (
 	"github.com/zenon-network/go-zenon/common/crypto"
 	"github.com/zenon-network/go-zenon/common/types"
 	"github.com/zenon-network/go-zenon/pow"
-	"github.com/zenon-network/go-zenon/rpc/api"
 	"github.com/zenon-network/go-zenon/rpc/api/embedded"
 	"github.com/zenon-network/go-zenon/wallet"
 )
@@ -90,7 +89,46 @@ func checkAndSetFields(client *rpc_client.RpcClient, transaction *nom.AccountBlo
 	return nil
 }
 
-func setDifficulty(client *rpc_client.RpcClient, transaction *nom.AccountBlock) error {
+func CheckAndSetFields(client *rpc_client.RpcClient, transaction *nom.AccountBlock, address types.Address, public []byte) error {
+	transaction.Address = address
+	transaction.PublicKey = public
+
+	if err := autofillTransactionParameters(client, transaction); err != nil {
+		return err
+	}
+
+	if transaction.BlockType == nom.BlockTypeUserReceive {
+		if transaction.FromBlockHash == types.ZeroHash {
+			return ErrZeroFromHash
+		}
+		sendBlock, err := client.LedgerApi.GetAccountBlockByHash(transaction.FromBlockHash)
+		if err != nil {
+			return err
+		} else if sendBlock == nil {
+			return ErrNonExistentAccountBlock
+		}
+
+		if sendBlock.ToAddress != transaction.Address {
+			return ErrDifferentReceiver
+		}
+
+		if len(transaction.Data) > 0 {
+			return ErrContainsData
+		}
+	}
+
+	nonce, err := transaction.Nonce.MarshalText()
+	if err != nil {
+		return err
+	}
+	if transaction.Difficulty > 0 && len(nonce) == 0 {
+		return ErrNoNonce
+	}
+
+	return nil
+}
+
+func SetDifficulty(client *rpc_client.RpcClient, transaction *nom.AccountBlock) error {
 	powParam := embedded.GetRequiredParam{
 		SelfAddr:  transaction.Address,
 		BlockType: transaction.BlockType,
@@ -132,15 +170,15 @@ func setHashAndSignature(transaction *nom.AccountBlock, currentKeyPair wallet.Ke
 	transaction.Signature = currentKeyPair.Sign(transaction.Hash.Bytes())
 }
 
-func DebugAccountBlock(ab *api.AccountBlock) {
-	CommonLogger.Debug("AccountBlock Type: %d\n", ab.BlockType)
-	CommonLogger.Debug("AccountBlock Hash: %s\n", ab.Hash.String())
-	CommonLogger.Debug("AccountBlock PrevHash: %s\n", ab.PreviousHash.String())
-	CommonLogger.Debug("AccountBlock Height: %d\n", ab.Height)
-	CommonLogger.Debug("AccountBlock MomentumAcknowledged: %v\n", ab.MomentumAcknowledged)
-	CommonLogger.Debug("AccountBlock Address: %s\n", ab.Address.String())
-	CommonLogger.Debug("AccountBlock ToAddress: %s\n", ab.ToAddress.String())
-	CommonLogger.Debug("AccountBlock Amount %d\n", ab.Amount.Uint64())
-	CommonLogger.Debug("AccountBlock FromBlockHash: %s\n", ab.FromBlockHash.String())
-	CommonLogger.Debug("AccountBlock Data: %v\n", ab.Data)
+func DebugAccountBlock(ab *nom.AccountBlock) {
+	CommonLogger.Debug("AccountBlock Type: ", ab.BlockType, nil)
+	CommonLogger.Debug("AccountBlock Hash: ", ab.Hash.String(), nil)
+	CommonLogger.Debug("AccountBlock PrevHash: ", ab.PreviousHash.String(), nil)
+	CommonLogger.Debug("AccountBlock Height: ", ab.Height, nil)
+	CommonLogger.Debug("AccountBlock MomentumAcknowledged: ", ab.MomentumAcknowledged, nil)
+	CommonLogger.Debug("AccountBlock Address: ", ab.Address.String(), nil)
+	CommonLogger.Debug("AccountBlock ToAddress: ", ab.ToAddress.String(), nil)
+	CommonLogger.Debug("AccountBlock Amount ", ab.Amount.Uint64(), nil)
+	CommonLogger.Debug("AccountBlock FromBlockHash: ", ab.FromBlockHash.String(), nil)
+	CommonLogger.Debug("AccountBlock Data: ", ab.Data, nil)
 }
