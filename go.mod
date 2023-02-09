@@ -1,6 +1,6 @@
 module znn-sdk-go
 
-go 1.18
+go 1.20
 
 require (
 	github.com/inconshreveable/log15 v0.0.0-20201112154412-8562bdadbbac
