@@ -41,4 +41,4 @@ require (
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 )
 
-replace github.com/zenon-network/go-zenon => ../go-zenon
+replace github.com/zenon-network/go-zenon v0.0.4 => github.com/HyperCore-Team/go-zenon v0.0.0-20220414193524-c0f931d3cd98
