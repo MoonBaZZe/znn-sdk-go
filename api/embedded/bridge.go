@@ -247,7 +247,7 @@ func (ba *BridgeApi) ChangeAdministratorEDDSAPubKey(pubKey, signature string) *n
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
 		Data: definition.ABIBridge.PackMethodPanic(
-			definition.ChangeAdministratorEDDSAPubKeyMethodName,
+			definition.ChangeAdministratorMethodName,
 			pubKey,
 			signature,
 		),
