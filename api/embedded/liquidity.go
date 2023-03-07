@@ -44,7 +44,8 @@ func (sa *LiquidityApi) SetTokenTupleMethod(tokenStandards []string, znnPercenta
 		ToAddress:     types.LiquidityContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
-		Data:          definition.ABILiquidity.PackMethodPanic(definition.SetTokenTupleMethodName, tokenStandards, znnPercentages, qsrPercentages, minAmounts),
+		Data: definition.ABILiquidity.PackMethodPanic(definition.SetTokenTupleMethodName,
+			tokenStandards, znnPercentages, qsrPercentages, minAmounts),
 	}
 }
 
@@ -58,26 +59,15 @@ func (sa *LiquidityApi) LiquidityStake(durationInSec int64, amount *big.Int, zts
 	}
 }
 
-func (sa *LiquidityApi) StartLiquidityStake() *nom.AccountBlock {
+func (sa *LiquidityApi) SetIsHalted(value bool) *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.LiquidityContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
 		Data: definition.ABILiquidity.PackMethodPanic(
-			definition.StartLiquidityStakeMethodName,
-		),
-	}
-}
-
-func (sa *LiquidityApi) StopLiquidityStake() *nom.AccountBlock {
-	return &nom.AccountBlock{
-		BlockType:     nom.BlockTypeUserSend,
-		ToAddress:     types.LiquidityContract,
-		TokenStandard: types.ZnnTokenStandard,
-		Amount:        common.Big0,
-		Data: definition.ABILiquidity.PackMethodPanic(
-			definition.StopLiquidityStakeMethodName,
+			definition.SetIsHaltedMethodName,
+			value,
 		),
 	}
 }
@@ -107,10 +97,9 @@ func (sa *LiquidityApi) UnlockLiquidityStakeEntries(zts types.ZenonTokenStandard
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.LiquidityContract,
-		TokenStandard: types.ZnnTokenStandard,
+		TokenStandard: zts,
 		Amount:        common.Big0,
-		Data: definition.ABILiquidity.PackMethodPanic(definition.UnlockLiquidityStakeEntriesMethodName,
-			zts),
+		Data:          definition.ABILiquidity.PackMethodPanic(definition.UnlockLiquidityStakeEntriesMethodName),
 	}
 }
 

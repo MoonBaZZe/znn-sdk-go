@@ -36,6 +36,14 @@ func (ba *BridgeApi) GetOrchestratorInfo() (*definition.OrchestratorInfo, error)
 	return ans, nil
 }
 
+func (ba *BridgeApi) GetTimeChallengesInfo() (*embedded.TimeChallengesList, error) {
+	ans := new(embedded.TimeChallengesList)
+	if err := ba.client.Call(ans, "embedded.bridge.getTimeChallengesInfo"); err != nil {
+		return nil, err
+	}
+	return ans, nil
+}
+
 func (ba *BridgeApi) GetSecurityInfo() (*definition.SecurityInfoVariable, error) {
 	ans := new(definition.SecurityInfoVariable)
 	if err := ba.client.Call(ans, "embedded.bridge.getSecurityInfo"); err != nil {
@@ -212,19 +220,20 @@ func (ba *BridgeApi) Unhalt() *nom.AccountBlock {
 	}
 }
 
-func (ba *BridgeApi) AllowKeygen() *nom.AccountBlock {
+func (ba *BridgeApi) SetAllowKeygen(allowKeyGen bool) *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.BridgeContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
 		Data: definition.ABIBridge.PackMethodPanic(
-			definition.AllowKeygenMethodName,
+			definition.SetAllowKeygenMethodName,
+			allowKeyGen,
 		),
 	}
 }
 
-func (ba *BridgeApi) ChangeTssECDSAPubKey(pubKey, signature, newSignature string, keySignThreshold uint32) *nom.AccountBlock {
+func (ba *BridgeApi) ChangeTssECDSAPubKey(pubKey, signature, newSignature string) *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.BridgeContract,
@@ -235,12 +244,11 @@ func (ba *BridgeApi) ChangeTssECDSAPubKey(pubKey, signature, newSignature string
 			pubKey,
 			signature,
 			newSignature,
-			keySignThreshold,
 		),
 	}
 }
 
-func (ba *BridgeApi) ChangeAdministratorEDDSAPubKey(pubKey, signature string) *nom.AccountBlock {
+func (ba *BridgeApi) ChangeAdministrator(administrator types.Address) *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.BridgeContract,
@@ -248,8 +256,7 @@ func (ba *BridgeApi) ChangeAdministratorEDDSAPubKey(pubKey, signature string) *n
 		Amount:        common.Big0,
 		Data: definition.ABIBridge.PackMethodPanic(
 			definition.ChangeAdministratorMethodName,
-			pubKey,
-			signature,
+			administrator,
 		),
 	}
 }
@@ -261,7 +268,7 @@ func (ba *BridgeApi) AddNetwork(networkClass uint32, chainId uint32, name, contr
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
 		Data: definition.ABIBridge.PackMethodPanic(
-			definition.AddNetworkMethodName,
+			definition.SetNetworkMethodName,
 			networkClass,
 			chainId,
 			name,
@@ -324,14 +331,14 @@ func (ba *BridgeApi) RemoveTokenPair(networkClass uint32, chainId uint32, tokenS
 	}
 }
 
-func (ba *BridgeApi) UpdateNetworkMetadata(networkClass uint32, chainId uint32, metadata string) *nom.AccountBlock {
+func (ba *BridgeApi) SetNetworkMetadata(networkClass uint32, chainId uint32, metadata string) *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.BridgeContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
 		Data: definition.ABIBridge.PackMethodPanic(
-			definition.UpdateNetworkMetadataMethodName,
+			definition.SetNetworkMetadataMethodName,
 			networkClass,
 			chainId,
 			metadata,
@@ -368,28 +375,15 @@ func (ba *BridgeApi) NominateGuardians(guardians []string) *nom.AccountBlock {
 	}
 }
 
-func (ba *BridgeApi) UpdateBridgeMetadata(metadata string) *nom.AccountBlock {
+func (ba *BridgeApi) SetBridgeMetadata(metadata string) *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.BridgeContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
 		Data: definition.ABIBridge.PackMethodPanic(
-			definition.UpdateBridgeMetadataMethodName,
+			definition.SetBridgeMetadataMethodName,
 			metadata,
-		),
-	}
-}
-
-func (ba *BridgeApi) SetUnhaltDurationMethod(duration uint64) *nom.AccountBlock {
-	return &nom.AccountBlock{
-		BlockType:     nom.BlockTypeUserSend,
-		ToAddress:     types.BridgeContract,
-		TokenStandard: types.ZnnTokenStandard,
-		Amount:        common.Big0,
-		Data: definition.ABIBridge.PackMethodPanic(
-			definition.SetUnhaltDurationMethodName,
-			duration,
 		),
 	}
 }
