@@ -36,6 +36,38 @@ func (sa *LiquidityApi) GetFrontierRewardByPage(address types.Address, pageIndex
 	return ans, nil
 }
 
+func (sa *LiquidityApi) GetLiquidityInfo() (*definition.LiquidityInfo, error) {
+	ans := new(definition.LiquidityInfo)
+	if err := sa.client.Call(ans, "embedded.liquidity.getLiquidityInfo"); err != nil {
+		return nil, err
+	}
+	return ans, nil
+}
+
+func (sa *LiquidityApi) GetSecurityInfo() (*definition.SecurityInfoVariable, error) {
+	ans := new(definition.SecurityInfoVariable)
+	if err := sa.client.Call(ans, "embedded.liquidity.getSecurityInfo"); err != nil {
+		return nil, err
+	}
+	return ans, nil
+}
+
+func (sa *LiquidityApi) GetLiquidityStakeEntriesByAddress(address types.Address, pageIndex, pageSize uint32) (*embedded.LiquidityStakeList, error) {
+	ans := new(embedded.LiquidityStakeList)
+	if err := sa.client.Call(ans, "embedded.liquidity.getLiquidityStakeEntriesByAddress", address.String(), pageIndex, pageSize); err != nil {
+		return nil, err
+	}
+	return ans, nil
+}
+
+func (sa *LiquidityApi) GetTimeChallengesInfo() (*embedded.TimeChallengesList, error) {
+	ans := new(embedded.TimeChallengesList)
+	if err := sa.client.Call(ans, "embedded.liquidity.getTimeChallengesInfo"); err != nil {
+		return nil, err
+	}
+	return ans, nil
+}
+
 // Contract calls
 
 func (sa *LiquidityApi) SetTokenTupleMethod(tokenStandards []string, znnPercentages []uint32, qsrPercentages []uint32, minAmounts []*big.Int) *nom.AccountBlock {
@@ -111,5 +143,18 @@ func (sa *LiquidityApi) SetAdditionalReward(znnReward *big.Int, qsrAmount *big.I
 		Amount:        common.Big0,
 		Data: definition.ABILiquidity.PackMethodPanic(definition.SetAdditionalRewardMethodName,
 			znnReward, qsrAmount),
+	}
+}
+
+func (sa *LiquidityApi) NominateGuardians(guardians []types.Address) *nom.AccountBlock {
+	return &nom.AccountBlock{
+		BlockType:     nom.BlockTypeUserSend,
+		ToAddress:     types.LiquidityContract,
+		TokenStandard: types.ZnnTokenStandard,
+		Amount:        common.Big0,
+		Data: definition.ABILiquidity.PackMethodPanic(
+			definition.NominateGuardiansMethodName,
+			guardians,
+		),
 	}
 }
