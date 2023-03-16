@@ -1,13 +1,14 @@
 package embedded
 
 import (
+	"math/big"
+
 	"github.com/zenon-network/go-zenon/chain/nom"
 	"github.com/zenon-network/go-zenon/common"
 	"github.com/zenon-network/go-zenon/common/types"
 	"github.com/zenon-network/go-zenon/rpc/api/embedded"
 	"github.com/zenon-network/go-zenon/rpc/server"
 	"github.com/zenon-network/go-zenon/vm/embedded/definition"
-	"math/big"
 )
 
 type BridgeApi struct {
@@ -233,7 +234,7 @@ func (ba *BridgeApi) SetAllowKeygen(allowKeyGen bool) *nom.AccountBlock {
 	}
 }
 
-func (ba *BridgeApi) ChangeTssECDSAPubKey(pubKey, signature, newSignature string) *nom.AccountBlock {
+func (ba *BridgeApi) ChangeTssECDSAPubKey(pubKey, signature string, newSignature string) *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.BridgeContract,
@@ -362,7 +363,7 @@ func (ba *BridgeApi) SetOrchestratorInfo(windowSize uint64, keyGenThreshold, con
 	}
 }
 
-func (ba *BridgeApi) NominateGuardians(guardians []string) *nom.AccountBlock {
+func (ba *BridgeApi) NominateGuardians(guardians []types.Address) *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.BridgeContract,
