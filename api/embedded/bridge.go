@@ -234,7 +234,7 @@ func (ba *BridgeApi) SetAllowKeygen(allowKeyGen bool) *nom.AccountBlock {
 	}
 }
 
-func (ba *BridgeApi) ChangeTssECDSAPubKey(pubKey, signature string, newSignature string) *nom.AccountBlock {
+func (ba *BridgeApi) ChangeTssECDSAPubKey(pubKey, signature, newSignature string) *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.BridgeContract,
