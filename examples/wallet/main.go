@@ -13,7 +13,7 @@ func main() {
 		if err := wallet.WriteKeyFile(kf, "keyfile-sdk", "123456"); err != nil {
 			zenon.WalletLogger.Error("Error while trying to create key file", "wallet", err)
 		}
-		if kf, err = wallet.ReadKeyFile("keyfile-sdk", "123456"); err != nil {
+		if kf, err = wallet.ReadKeyFile("keyfile-sdk", "123456", ""); err != nil {
 			zenon.WalletLogger.Error("Error while trying to read key file", "wallet", err)
 		}
 	}
