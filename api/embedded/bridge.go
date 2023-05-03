@@ -1,14 +1,13 @@
 package embedded
 
 import (
-	"math/big"
-
 	"github.com/zenon-network/go-zenon/chain/nom"
 	"github.com/zenon-network/go-zenon/common"
 	"github.com/zenon-network/go-zenon/common/types"
 	"github.com/zenon-network/go-zenon/rpc/api/embedded"
 	"github.com/zenon-network/go-zenon/rpc/server"
 	"github.com/zenon-network/go-zenon/vm/embedded/definition"
+	"math/big"
 )
 
 type BridgeApi struct {
@@ -205,6 +204,18 @@ func (ba *BridgeApi) Halt(signature string) *nom.AccountBlock {
 		Data: definition.ABIBridge.PackMethodPanic(
 			definition.HaltMethodName,
 			signature,
+		),
+	}
+}
+
+func (ba *BridgeApi) Emergency() *nom.AccountBlock {
+	return &nom.AccountBlock{
+		BlockType:     nom.BlockTypeUserSend,
+		ToAddress:     types.BridgeContract,
+		TokenStandard: types.ZnnTokenStandard,
+		Amount:        common.Big0,
+		Data: definition.ABIBridge.PackMethodPanic(
+			definition.EmergencyMethodName,
 		),
 	}
 }
