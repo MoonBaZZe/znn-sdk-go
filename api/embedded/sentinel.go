@@ -39,11 +39,11 @@ func (sa *SentinelApi) GetAllActive(pageIndex, pageSize uint32) (*embedded.Senti
 }
 
 func (sa *SentinelApi) GetDepositedQsr(address types.Address) (*big.Int, error) {
-	ans := new(big.Int)
-	if err := sa.client.Call(ans, "embedded.sentinel.getDepositedQsr", address); err != nil {
+	var ans string
+	if err := sa.client.Call(&ans, "embedded.sentinel.getDepositedQsr", address); err != nil {
 		return nil, err
 	}
-	return ans, nil
+	return common.StringToBigInt(ans), nil
 }
 
 func (sa *SentinelApi) GetUncollectedReward(address types.Address) (*definition.RewardDeposit, error) {
