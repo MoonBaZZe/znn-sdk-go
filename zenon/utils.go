@@ -1,11 +1,11 @@
 package zenon
 
 import (
+	"math/big"
 	"znn-sdk-go/rpc_client"
 
 	"github.com/inconshreveable/log15"
 	"github.com/zenon-network/go-zenon/chain/nom"
-	"github.com/zenon-network/go-zenon/common"
 	"github.com/zenon-network/go-zenon/common/crypto"
 	"github.com/zenon-network/go-zenon/common/types"
 	"github.com/zenon-network/go-zenon/pow"
@@ -139,9 +139,9 @@ func SetDifficulty(client *rpc_client.RpcClient, transaction *nom.AccountBlock) 
 	if err != nil {
 		return err
 	}
-	if response.RequiredDifficulty.Cmp(common.Big0) > 0 {
+	if response.RequiredDifficulty > 0 {
 		transaction.FusedPlasma = response.AvailablePlasma
-		transaction.Difficulty = response.RequiredDifficulty.Uint64()
+		transaction.Difficulty = response.RequiredDifficulty
 
 		CommonLogger.Info("Generating Plasma, please wait\n")
 
@@ -151,7 +151,7 @@ func SetDifficulty(client *rpc_client.RpcClient, transaction *nom.AccountBlock) 
 			return err
 		}
 
-		nonceFound := pow.GetPoWNonce(response.RequiredDifficulty, powData)
+		nonceFound := pow.GetPoWNonce(new(big.Int).SetUint64(response.RequiredDifficulty), powData)
 
 		transaction.Nonce = nom.DeSerializeNonce(nonceFound)
 	} else {
