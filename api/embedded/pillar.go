@@ -23,12 +23,20 @@ func NewPillarApi(client *server.Client) *PillarApi {
 }
 
 func (pa *PillarApi) GetDepositedQsr(address types.Address) (*big.Int, error) {
-	ans := big.NewInt(0)
+	var ans string
 	if err := pa.client.Call(ans, "embedded.pillar.getDepositedQsr", address.String()); err != nil {
 		return nil, err
 	}
-	return ans, nil
+	return common.StringToBigInt(ans), nil
 }
+func (pa *PillarApi) GetQsrRegistrationCost() (*big.Int, error) {
+	var ans string
+	if err := pa.client.Call(ans, "embedded.pillar.getQsrRegistrationCost"); err != nil {
+		return nil, err
+	}
+	return common.StringToBigInt(ans), nil
+}
+
 func (pa *PillarApi) GetUncollectedReward(address types.Address) (*definition.RewardDeposit, error) {
 	ans := new(definition.RewardDeposit)
 	if err := pa.client.Call(ans, "embedded.pillar.getUncollectedReward", address.String()); err != nil {
