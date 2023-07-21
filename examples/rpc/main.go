@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"znn-sdk-go/zenon"
+	"github.com/MoonBaZZe/znn-sdk-go/zenon"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package zenon
 
 import (
+	"github.com/MoonBaZZe/znn-sdk-go/rpc_client"
 	"math/big"
-	"znn-sdk-go/rpc_client"
 
 	"github.com/inconshreveable/log15"
 	"github.com/zenon-network/go-zenon/chain/nom"

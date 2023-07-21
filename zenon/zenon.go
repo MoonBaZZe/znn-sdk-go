@@ -2,11 +2,11 @@ package zenon
 
 import (
 	"errors"
+	"github.com/MoonBaZZe/znn-sdk-go/rpc_client"
+	"github.com/MoonBaZZe/znn-sdk-go/wallet"
 	"os"
 	"os/signal"
 	"syscall"
-	"znn-sdk-go/rpc_client"
-	"znn-sdk-go/wallet"
 
 	"github.com/zenon-network/go-zenon/chain/nom"
 	"github.com/zenon-network/go-zenon/common/types"

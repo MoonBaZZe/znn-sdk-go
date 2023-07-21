@@ -1,8 +1,8 @@
 package rpc_client
 
 import (
-	"znn-sdk-go/api"
-	"znn-sdk-go/api/embedded"
+	"github.com/MoonBaZZe/znn-sdk-go/api"
+	"github.com/MoonBaZZe/znn-sdk-go/api/embedded"
 
 	"github.com/zenon-network/go-zenon/rpc/server"
 )

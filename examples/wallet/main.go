@@ -1,8 +1,8 @@
 package main
 
 import (
-	"znn-sdk-go/wallet"
-	"znn-sdk-go/zenon"
+	"github.com/MoonBaZZe/znn-sdk-go/wallet"
+	"github.com/MoonBaZZe/znn-sdk-go/zenon"
 )
 
 func main() {

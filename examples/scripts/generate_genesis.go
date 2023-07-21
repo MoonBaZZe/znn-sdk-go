@@ -3,11 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/MoonBaZZe/znn-sdk-go/wallet"
 	"io/ioutil"
 	"math/big"
 	"os"
 	"strconv"
-	"znn-sdk-go/wallet"
 
 	"github.com/zenon-network/go-zenon/chain/genesis"
 	"github.com/zenon-network/go-zenon/common"
