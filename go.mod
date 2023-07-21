@@ -1,11 +1,11 @@
-module znn-sdk-go
+module github.com/MoonBaZZe/znn-sdk-go
 
 go 1.20
 
 require (
 	github.com/inconshreveable/log15 v0.0.0-20201112154412-8562bdadbbac
 	github.com/tyler-smith/go-bip39 v1.1.0
-	github.com/zenon-network/go-zenon v0.0.5-alphanet
+	github.com/zenon-network/go-zenon v0.0.6-alphanet
 )
 
 require (
