@@ -67,6 +67,80 @@ func (mma *MergeMiningApi) GetSecurityInfo() (*definition.SecurityInfoVariable, 
 	return ans, nil
 }
 
+func (mma *MergeMiningApi) SetInitialBitcoinBlock(version int32, prevBlock, merkleRoot types.Hash, timestamp, bits, nonce uint32) *nom.AccountBlock {
+	return &nom.AccountBlock{
+		BlockType:     nom.BlockTypeUserSend,
+		ToAddress:     types.MergeMiningContract,
+		TokenStandard: types.ZnnTokenStandard,
+		Amount:        common.Big0,
+		Data: definition.ABIBridge.PackMethodPanic(
+			definition.SetInitialBitcoinBlockHeaderMethodName,
+			version,
+			prevBlock,
+			merkleRoot,
+			timestamp,
+			bits,
+			nonce,
+		),
+	}
+}
+
+func (mma *MergeMiningApi) AddBitcoinBlockHeader(version int32, prevBlock, merkleRoot types.Hash, timestamp, bits, nonce uint32) *nom.AccountBlock {
+	return &nom.AccountBlock{
+		BlockType:     nom.BlockTypeUserSend,
+		ToAddress:     types.MergeMiningContract,
+		TokenStandard: types.ZnnTokenStandard,
+		Amount:        common.Big0,
+		Data: definition.ABIBridge.PackMethodPanic(
+			definition.AddBitcoinBlockHeaderMethodName,
+			version,
+			prevBlock,
+			merkleRoot,
+			timestamp,
+			bits,
+			nonce,
+		),
+	}
+}
+
+func (mma *MergeMiningApi) AddShare(shareChainId uint8, witness bool, version int32, prevBlock, merkleRoot types.Hash, timestamp, bits, nonce uint32,
+	proof, prooff, proofff, prooffff, additionalData types.Hash) *nom.AccountBlock {
+	return &nom.AccountBlock{
+		BlockType:     nom.BlockTypeUserSend,
+		ToAddress:     types.MergeMiningContract,
+		TokenStandard: types.ZnnTokenStandard,
+		Amount:        common.Big0,
+		Data: definition.ABIBridge.PackMethodPanic(
+			definition.AddShareMethodName,
+			shareChainId,
+			witness,
+			version,
+			prevBlock,
+			merkleRoot,
+			timestamp,
+			bits,
+			nonce,
+			proof, prooff, proofff, prooffff,
+			additionalData,
+		),
+	}
+}
+
+func (mma *MergeMiningApi) SetShareChain(id uint8, bits, rewardMultiplier uint32) *nom.AccountBlock {
+	return &nom.AccountBlock{
+		BlockType:     nom.BlockTypeUserSend,
+		ToAddress:     types.MergeMiningContract,
+		TokenStandard: types.ZnnTokenStandard,
+		Amount:        common.Big0,
+		Data: definition.ABIBridge.PackMethodPanic(
+			definition.SetShareChainMethodName,
+			id,
+			bits,
+			rewardMultiplier,
+		),
+	}
+}
+
 func (mma *MergeMiningApi) Emergency() *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
