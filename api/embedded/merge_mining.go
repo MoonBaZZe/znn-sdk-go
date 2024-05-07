@@ -45,7 +45,7 @@ func (mma *MergeMiningApi) GetShareChainInfo(id uint8) (*definition.ShareChainIn
 
 func (mma *MergeMiningApi) GetBlockHeader(hash types.Hash) (*definition.BlockHeaderVariable, error) {
 	ans := new(definition.BlockHeaderVariable)
-	if err := mma.client.Call(ans, "embedded.merge_mining.getShareChainInfo", hash); err != nil {
+	if err := mma.client.Call(ans, "embedded.merge_mining.getBlockHeader", hash); err != nil {
 		return nil, err
 	}
 	return ans, nil
