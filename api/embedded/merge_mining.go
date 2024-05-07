@@ -53,7 +53,7 @@ func (mma *MergeMiningApi) GetBlockHeader(hash types.Hash) (*definition.BlockHea
 
 func (mma *MergeMiningApi) GetTimeChallengesInfo() (*embedded.TimeChallengesList, error) {
 	ans := new(embedded.TimeChallengesList)
-	if err := mma.client.Call(ans, "embedded.merge_mining.getTimeChallengesInfo"); err != nil {
+	if err := mma.client.Call(ans, "embedded.merge_mining.getTimeChallengesInfoMergeMining"); err != nil {
 		return nil, err
 	}
 	return ans, nil
@@ -67,13 +67,13 @@ func (mma *MergeMiningApi) GetSecurityInfo() (*definition.SecurityInfoVariable, 
 	return ans, nil
 }
 
-func (mma *MergeMiningApi) SetInitialBitcoinBlock(version int32, prevBlock, merkleRoot types.Hash, timestamp, bits, nonce uint32) *nom.AccountBlock {
+func (mma *MergeMiningApi) SetInitialBitcoinBlock(version int32, prevBlock, merkleRoot types.Hash, timestamp, bits, nonce, height uint32) *nom.AccountBlock {
 	return &nom.AccountBlock{
 		BlockType:     nom.BlockTypeUserSend,
 		ToAddress:     types.MergeMiningContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
-		Data: definition.ABIBridge.PackMethodPanic(
+		Data: definition.ABIMergeMining.PackMethodPanic(
 			definition.SetInitialBitcoinBlockHeaderMethodName,
 			version,
 			prevBlock,
@@ -81,6 +81,7 @@ func (mma *MergeMiningApi) SetInitialBitcoinBlock(version int32, prevBlock, merk
 			timestamp,
 			bits,
 			nonce,
+			height,
 		),
 	}
 }
@@ -91,7 +92,7 @@ func (mma *MergeMiningApi) AddBitcoinBlockHeader(version int32, prevBlock, merkl
 		ToAddress:     types.MergeMiningContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
-		Data: definition.ABIBridge.PackMethodPanic(
+		Data: definition.ABIMergeMining.PackMethodPanic(
 			definition.AddBitcoinBlockHeaderMethodName,
 			version,
 			prevBlock,
@@ -110,7 +111,7 @@ func (mma *MergeMiningApi) AddShare(shareChainId uint8, witness bool, version in
 		ToAddress:     types.MergeMiningContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
-		Data: definition.ABIBridge.PackMethodPanic(
+		Data: definition.ABIMergeMining.PackMethodPanic(
 			definition.AddShareMethodName,
 			shareChainId,
 			witness,
@@ -132,7 +133,7 @@ func (mma *MergeMiningApi) SetShareChain(id uint8, bits, rewardMultiplier uint32
 		ToAddress:     types.MergeMiningContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
-		Data: definition.ABIBridge.PackMethodPanic(
+		Data: definition.ABIMergeMining.PackMethodPanic(
 			definition.SetShareChainMethodName,
 			id,
 			bits,
@@ -147,7 +148,7 @@ func (mma *MergeMiningApi) Emergency() *nom.AccountBlock {
 		ToAddress:     types.MergeMiningContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
-		Data: definition.ABIBridge.PackMethodPanic(
+		Data: definition.ABIMergeMining.PackMethodPanic(
 			definition.EmergencyMethodName,
 		),
 	}
@@ -159,7 +160,7 @@ func (mma *MergeMiningApi) ChangeTssECDSAPubKey(pubKey, signature, newSignature 
 		ToAddress:     types.MergeMiningContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
-		Data: definition.ABIBridge.PackMethodPanic(
+		Data: definition.ABIMergeMining.PackMethodPanic(
 			definition.ChangeTssECDSAPubKeyMethodName,
 			pubKey,
 			signature,
@@ -174,7 +175,7 @@ func (mma *MergeMiningApi) ChangeAdministrator(administrator types.Address) *nom
 		ToAddress:     types.MergeMiningContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
-		Data: definition.ABIBridge.PackMethodPanic(
+		Data: definition.ABIMergeMining.PackMethodPanic(
 			definition.ChangeAdministratorMethodName,
 			administrator,
 		),
@@ -187,7 +188,7 @@ func (mma *MergeMiningApi) NominateGuardians(guardians []types.Address) *nom.Acc
 		ToAddress:     types.MergeMiningContract,
 		TokenStandard: types.ZnnTokenStandard,
 		Amount:        common.Big0,
-		Data: definition.ABIBridge.PackMethodPanic(
+		Data: definition.ABIMergeMining.PackMethodPanic(
 			definition.NominateGuardiansMethodName,
 			guardians,
 		),
